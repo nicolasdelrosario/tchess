@@ -1,0 +1,37 @@
+{
+  "name": "terminal-chess",
+  "version": "0.1.0",
+  "description": "A terminal chess TUI with local multiplayer and Stockfish-powered AI.",
+  "type": "module",
+  "bin": {
+    "chess": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc && chmod +x dist/cli.js",
+    "dev": "tsx src/cli.tsx",
+    "start": "node dist/cli.js",
+    "test": "vitest run",
+    "link:local": "npm run build && npm link"
+  },
+  "keywords": [
+    "chess",
+    "terminal",
+    "cli",
+    "stockfish",
+    "tui"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "chess.js": "^1.4.0",
+    "ink": "^5.2.1",
+    "meow": "^13.2.0",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.18",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

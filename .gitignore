@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.env
+.DS_Store
+coverage/
+vendor/stockfish/darwin-arm64/stockfish
