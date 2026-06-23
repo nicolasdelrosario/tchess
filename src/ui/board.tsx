@@ -16,25 +16,6 @@ const pieceGlyphs: Record<PieceSymbol, string> = {
   k: "♚"
 };
 
-const pieceGlyphsByColor: Record<Color, Record<PieceSymbol, string>> = {
-  w: {
-    p: "♙",
-    n: "♘",
-    b: "♗",
-    r: "♖",
-    q: "♕",
-    k: "♔"
-  },
-  b: {
-    p: "♟",
-    n: "♞",
-    b: "♝",
-    r: "♜",
-    q: "♛",
-    k: "♚"
-  }
-};
-
 // Piece block art adapted from chess-tui's MIT-licensed DEFAULT piece style.
 const pieceArt: Record<PieceSymbol, string[]> = {
   p: ["     ", " ▄▇▄ ", " ▜█▛ ", "▄███▄", "▔▔▔▔▔"],
@@ -105,19 +86,6 @@ export function renderBoardText(snapshot: GameSnapshot, perspective: Side): stri
 
   rows.push(`  ${shownFiles.map((file) => ` ${file} `).join("")}`);
   return rows.join("\n");
-}
-
-export function renderSquare(
-  file: number,
-  rank: number,
-  piece: string | null,
-  state: SquareRenderState
-): string {
-  const isLight = (file + rank) % 2 === 1;
-  const background = getAnsiBackground(isLight, Boolean(piece), state);
-  const foreground = piece ? getAnsiPieceForeground(piece, isLight) : "";
-
-  return `${background}${foreground} ${piece ?? " "} ${ANSI_RESET}`;
 }
 
 export const ChessBoard = React.memo(function ChessBoard({
@@ -199,10 +167,6 @@ export function renderBoardBlock(
       const fileIndex = files.indexOf(square[0] as (typeof files)[number]);
       const rankIndex = ranks.indexOf(square[1] as (typeof ranks)[number]);
 
-      if (resolvedCellHeight === 1) {
-        return [renderGlyphSquare(fileIndex, rankIndex, piece, state, isLegalTarget, cellWidth)];
-      }
-
       return piece
         ? renderPieceSquare(fileIndex, rankIndex, piece.type as PieceSymbol, piece.color, state, cellWidth, resolvedCellHeight)
         : renderEmptySquare(fileIndex, rankIndex, state, isLegalTarget, cellWidth, resolvedCellHeight);
@@ -241,19 +205,6 @@ function getAnsiBackground(isLight: boolean, hasPiece: boolean, state: SquareRen
   return hasPiece ? ANSI_BOARD_COLORS.darkSquareWithPiece : ANSI_BOARD_COLORS.darkSquareEmpty;
 }
 
-function getAnsiPieceForeground(piece: string, isLight: boolean): string {
-  const isWhitePiece = "♙♘♗♖♕♔".includes(piece);
-  if (isWhitePiece) {
-    return isLight ? ANSI_BOARD_COLORS.whitePieceOnLight : ANSI_BOARD_COLORS.whitePieceOnDark;
-  }
-
-  return isLight ? ANSI_BOARD_COLORS.blackPieceOnLight : ANSI_BOARD_COLORS.blackPieceOnDark;
-}
-
-function getColoredPieceGlyph(type: PieceSymbol, color: Color): string {
-  return pieceGlyphsByColor[color][type];
-}
-
 function renderPieceSquare(
   file: number,
   rank: number,
@@ -271,26 +222,6 @@ function renderPieceSquare(
   const art = normalizeArt(height >= BOARD_ART_HEIGHT ? pieceArt[type] : compactPieceArt[type], width, height);
 
   return art.map((line) => `${background}${foreground}${line}${ANSI_RESET}`);
-}
-
-function renderGlyphSquare(
-  file: number,
-  rank: number,
-  piece: { type: PieceSymbol; color: Color } | null,
-  state: SquareRenderState,
-  isLegalTarget: boolean,
-  width: number
-): string {
-  const isLight = (file + rank) % 2 === 1;
-  const background = isLegalTarget ? ANSI_BOARD_COLORS.legalSquare : getAnsiBackground(isLight, Boolean(piece), state);
-  const foreground = piece
-    ? piece.color === "w"
-      ? isLight ? ANSI_BOARD_COLORS.whitePieceOnLight : ANSI_BOARD_COLORS.whitePieceOnDark
-      : isLight ? ANSI_BOARD_COLORS.blackPieceOnLight : ANSI_BOARD_COLORS.blackPieceOnDark
-    : isLegalTarget ? ANSI_BOARD_COLORS.legalMarker : "";
-  const content = piece ? getColoredPieceGlyph(piece.type, piece.color) : isLegalTarget ? "•" : "";
-
-  return `${background}${foreground}${centerCell(content, width)}${ANSI_RESET}`;
 }
 
 function renderEmptySquare(

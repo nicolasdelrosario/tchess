@@ -385,7 +385,7 @@ function GameScreen({ selection, onExit }: { selection: Selection; onExit: () =>
   const fixedChromeHeight = 12;
   const boardHeightFor = (height: number, details: boolean) => fixedChromeHeight + 1 + height * 8 + (details ? 4 : 0);
   const fitsBoard = (height: number, details = false) => boardHeightFor(height, details) < screenHeight;
-  const boardCellHeight = fitsBoard(5) ? 5 : fitsBoard(3) ? 3 : 1;
+  const boardCellHeight = fitsBoard(5) ? 5 : 3;
   const useLargeBoard = boardCellHeight === 5;
   const showBoardDetails = boardCellHeight > 1 && fitsBoard(boardCellHeight, true);
   const showSidePanels = screenHeight >= 44 && boardCellHeight > 1;
@@ -393,8 +393,8 @@ function GameScreen({ selection, onExit }: { selection: Selection; onExit: () =>
   const rightRailWidth = showSidePanels ? shellWidth >= 180 ? 66 : shellWidth >= 130 ? 44 : 34 : 0;
   const boardGap = leftRailWidth > 0 ? 2 : 0;
   const boardAreaWidth = Math.max(43, shellInnerWidth - leftRailWidth - rightRailWidth - boardGap - 2);
-  const maxCellWidth = useLargeBoard ? 11 : boardCellHeight === 1 ? 3 : 7;
-  const minCellWidth = boardCellHeight === 1 ? 3 : 5;
+  const maxCellWidth = useLargeBoard ? 11 : 7;
+  const minCellWidth = 5;
   const cellWidth = Math.min(maxCellWidth, Math.max(minCellWidth, Math.floor((boardAreaWidth - 3) / 8)));
   const boardWidth = 3 + cellWidth * 8;
   const engineSource = useMemo(() => stockfishSourceLabel(), []);
