@@ -4,3 +4,4 @@ dist/
 .DS_Store
 coverage/
 vendor/stockfish/darwin-arm64/stockfish
+vendor/stockfish/linux-x64/stockfish
